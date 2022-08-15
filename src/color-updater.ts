@@ -121,30 +121,26 @@ export class ColorGenerator extends ColorUpdater {
     const baseSassVariableStyles =
       this.createWritableSassFileOnlySassBaseVariables()
 
-    const baseCssVariableStyles = `#{":root"}
-${this.getBaseVars()
+    const baseCssVariableStyles = `${this.getBaseVars()
   .map(({ name, value }) => `  ${name}: ${value}`)
-  .join('\n')}
-`
+  .join('\n')}`
 
-    const derivedCssVarStyles = `#{":root"}
-${this.getDerivedVars()
+    const derivedCssVarStyles = `${this.getDerivedVars()
   .map((vars) =>
     vars.map(({ name, value }) => `  ${name}: ${value}`).join('\n')
   )
-  .join('\n\n')}
-`
+  .join('\n')}`
 
     const fullFile = `
-// sass variables
+//sass variables
 ${baseSassVariableStyles}
 
-// declared base css variables
+#{":root"}
+  //declared base css variables
 ${baseCssVariableStyles}
 
-// derived, generated css variables
-${derivedCssVarStyles}
-`
+  //derived, generated css variables
+${derivedCssVarStyles}`
 
     return fullFile
   }
