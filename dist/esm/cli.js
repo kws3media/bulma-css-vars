@@ -34,6 +34,8 @@ function validateOptions(cwd) {
         }
         // sass output file
         const sassOutputFile = getAbsoluteFileName(options.sassOutputFile, cwd);
+        // theme output file
+        const themeFile = getAbsoluteFileName(options.themeFile, cwd);
         // entry sass file
         const sassEntryFile = getAbsoluteFileName(options.sassEntryFile, cwd);
         if (!(yield exists(sassEntryFile))) {
@@ -42,13 +44,14 @@ function validateOptions(cwd) {
         return {
             options,
             sassOutputFile,
+            themeFile,
             sassEntryFile,
         };
     });
 }
 export function runCli(cwd) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { options, sassEntryFile, sassOutputFile } = yield validateOptions(cwd);
+        const { options, sassEntryFile, sassOutputFile, themeFile } = yield validateOptions(cwd);
         // colorDefs
         const colorDefs = options.colorDefs;
         const colorCallSetFromColorDef = Object.assign({}, ...Object.entries(colorDefs).map(([colorName, _colorCallDef]) => {
@@ -61,9 +64,12 @@ export function runCli(cwd) {
         const provisionalUpdater = new ColorGenerator(colorCallSetFromColorDef);
         const sassVarsContentBase = provisionalUpdater.createWritableSassFileOnlySassBaseVariables();
         // create empty sass vars output file if it does not exist yet
-        if (!(yield exists(sassOutputFile)) ||
-            !(yield fileStartsWith(sassOutputFile, sassVarsContentBase))) {
+        if (!(yield exists(sassOutputFile)) || !(yield fileStartsWith(sassOutputFile, sassVarsContentBase))) {
             yield writeFile(sassOutputFile, sassVarsContentBase);
+        }
+        // create empty theme file if it does not exist yet
+        if (!(yield exists(themeFile))) {
+            yield writeFile(themeFile, `#{":root"}`);
         }
         // render sass
         const renderedCss = compileSass(sassEntryFile);
@@ -78,7 +84,7 @@ export function runCli(cwd) {
         const generator = new ColorGenerator(usedVarsWithColors);
         const sassVarsContent = generator.createWritableSassFile();
         // write sass vars output file
-        yield writeFile(sassOutputFile, sassVarsContent);
+        yield writeFile(themeFile, sassVarsContent);
         console.log(`Updated ${sassOutputFile}`);
     });
 }

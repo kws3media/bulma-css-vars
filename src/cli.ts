@@ -44,6 +44,9 @@ async function validateOptions(cwd: string) {
   // sass output file
   const sassOutputFile = getAbsoluteFileName(options.sassOutputFile, cwd)
 
+  // theme output file
+  const themeFile = getAbsoluteFileName(options.themeFile, cwd)
+
   // entry sass file
   const sassEntryFile = getAbsoluteFileName(options.sassEntryFile, cwd)
 
@@ -56,12 +59,13 @@ async function validateOptions(cwd: string) {
   return {
     options,
     sassOutputFile,
+    themeFile,
     sassEntryFile,
   }
 }
 
 export async function runCli(cwd: string) {
-  const { options, sassEntryFile, sassOutputFile } = await validateOptions(cwd)
+  const { options, sassEntryFile, sassOutputFile, themeFile } = await validateOptions(cwd)
 
   // colorDefs
   const colorDefs = options.colorDefs
@@ -77,15 +81,16 @@ export async function runCli(cwd: string) {
   )
 
   const provisionalUpdater = new ColorGenerator(colorCallSetFromColorDef)
-  const sassVarsContentBase =
-    provisionalUpdater.createWritableSassFileOnlySassBaseVariables()
+  const sassVarsContentBase = provisionalUpdater.createWritableSassFileOnlySassBaseVariables()
 
   // create empty sass vars output file if it does not exist yet
-  if (
-    !(await exists(sassOutputFile)) ||
-    !(await fileStartsWith(sassOutputFile, sassVarsContentBase))
-  ) {
+  if (!(await exists(sassOutputFile)) || !(await fileStartsWith(sassOutputFile, sassVarsContentBase))) {
     await writeFile(sassOutputFile, sassVarsContentBase)
+  }
+
+  // create empty theme file if it does not exist yet
+  if (!(await exists(themeFile))) {
+    await writeFile(themeFile, `#{":root"}`)
   }
 
   // render sass
@@ -108,7 +113,7 @@ export async function runCli(cwd: string) {
   const sassVarsContent = generator.createWritableSassFile()
 
   // write sass vars output file
-  await writeFile(sassOutputFile, sassVarsContent)
+  await writeFile(themeFile, sassVarsContent)
   console.log(`Updated ${sassOutputFile}`)
 }
 

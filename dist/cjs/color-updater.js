@@ -89,11 +89,7 @@ class ColorGenerator extends ColorUpdater {
         const derivedCssVarStyles = `${this.getDerivedVars()
             .map((vars) => vars.map(({ name, value }) => `  ${name}: ${value}`).join('\n'))
             .join('\n')}`;
-        const fullFile = `
-//sass variables
-${baseSassVariableStyles}
-
-#{":root"}
+        const fullFile = `#{":root"}
   //declared base css variables
 ${baseCssVariableStyles}
 

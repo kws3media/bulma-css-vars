@@ -131,11 +131,7 @@ export class ColorGenerator extends ColorUpdater {
   )
   .join('\n')}`
 
-    const fullFile = `
-//sass variables
-${baseSassVariableStyles}
-
-#{":root"}
+    const fullFile = `#{":root"}
   //declared base css variables
 ${baseCssVariableStyles}
 

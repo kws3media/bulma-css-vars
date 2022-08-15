@@ -1,4 +1,5 @@
 export interface BulmaCssVarsOptions {
+  themeFile: string
   sassOutputFile: string
   sassEntryFile: string
   colorDefs: { [colorName: string]: ColorDef }

@@ -37,6 +37,8 @@ function validateOptions(cwd) {
         }
         // sass output file
         const sassOutputFile = (0, fs_helper_1.getAbsoluteFileName)(options.sassOutputFile, cwd);
+        // theme output file
+        const themeFile = (0, fs_helper_1.getAbsoluteFileName)(options.themeFile, cwd);
         // entry sass file
         const sassEntryFile = (0, fs_helper_1.getAbsoluteFileName)(options.sassEntryFile, cwd);
         if (!(yield (0, fs_helper_1.exists)(sassEntryFile))) {
@@ -45,13 +47,14 @@ function validateOptions(cwd) {
         return {
             options,
             sassOutputFile,
+            themeFile,
             sassEntryFile,
         };
     });
 }
 function runCli(cwd) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { options, sassEntryFile, sassOutputFile } = yield validateOptions(cwd);
+        const { options, sassEntryFile, sassOutputFile, themeFile } = yield validateOptions(cwd);
         // colorDefs
         const colorDefs = options.colorDefs;
         const colorCallSetFromColorDef = Object.assign({}, ...Object.entries(colorDefs).map(([colorName, _colorCallDef]) => {
@@ -64,9 +67,12 @@ function runCli(cwd) {
         const provisionalUpdater = new color_updater_1.ColorGenerator(colorCallSetFromColorDef);
         const sassVarsContentBase = provisionalUpdater.createWritableSassFileOnlySassBaseVariables();
         // create empty sass vars output file if it does not exist yet
-        if (!(yield (0, fs_helper_1.exists)(sassOutputFile)) ||
-            !(yield (0, fs_helper_1.fileStartsWith)(sassOutputFile, sassVarsContentBase))) {
+        if (!(yield (0, fs_helper_1.exists)(sassOutputFile)) || !(yield (0, fs_helper_1.fileStartsWith)(sassOutputFile, sassVarsContentBase))) {
             yield (0, fs_helper_1.writeFile)(sassOutputFile, sassVarsContentBase);
+        }
+        // create empty theme file if it does not exist yet
+        if (!(yield (0, fs_helper_1.exists)(themeFile))) {
+            yield (0, fs_helper_1.writeFile)(themeFile, `#{":root"}`);
         }
         // render sass
         const renderedCss = (0, compile_sass_1.compileSass)(sassEntryFile);
@@ -81,7 +87,7 @@ function runCli(cwd) {
         const generator = new color_updater_1.ColorGenerator(usedVarsWithColors);
         const sassVarsContent = generator.createWritableSassFile();
         // write sass vars output file
-        yield (0, fs_helper_1.writeFile)(sassOutputFile, sassVarsContent);
+        yield (0, fs_helper_1.writeFile)(themeFile, sassVarsContent);
         console.log(`Updated ${sassOutputFile}`);
     });
 }
