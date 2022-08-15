@@ -89,10 +89,9 @@ ${this.getDerivedVars()
             .map((vars) => vars.map(({ name, value }) => `  ${name}: ${value}`).join('\n'))
             .join('\n\n')}
 `;
+        // sass variables
+        //${baseSassVariableStyles}
         const fullFile = `
-// sass variables
-${baseSassVariableStyles}
-
 // declared base css variables
 ${baseCssVariableStyles}
 
