@@ -8,6 +8,7 @@ export declare class ColorUpdater {
         name: string;
         value: string;
     }[][];
+    protected getMergedVars(): NameValueColor[][];
     getUpdatedVars(colorName: string, colorVal: string): NameValueColor[];
     updateVarsInDocument(colorName: string, colorVal: string): void;
     protected callToNameVal(base: string, call: ColorFnCall): {

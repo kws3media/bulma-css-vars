@@ -24,6 +24,18 @@ export class ColorUpdater {
         return calls.map((call) => this.callToNameVal(base, call))
       })
   }
+  protected getMergedVars() {
+    return Object.entries(this.colorVals).map(([name, { calls, value }]) => {
+      let ret = []
+      ret.push(getNameValFromColorDef(name, value))
+
+      if (calls.length) {
+        ret = ret.concat(calls.map((call) => this.callToNameVal(name, call)))
+      }
+
+      return ret
+    })
+  }
   getUpdatedVars(colorName: string, colorVal: string) {
     if (!(colorName in this.colorVals)) {
       console.warn(`Color '${colorName}' was not configured in bulma-css-vars!`)
@@ -118,25 +130,14 @@ export class ColorGenerator extends ColorUpdater {
   }
 
   createWritableSassFile(): string {
-    const baseSassVariableStyles =
-      this.createWritableSassFileOnlySassBaseVariables()
-
-    const baseCssVariableStyles = `${this.getBaseVars()
-  .map(({ name, value }) => `  ${name}: ${value}`)
-  .join('\n')}`
-
-    const derivedCssVarStyles = `${this.getDerivedVars()
-  .map((vars) =>
-    vars.map(({ name, value }) => `  ${name}: ${value}`).join('\n')
-  )
-  .join('\n')}`
+    const cssVars = `${this.getMergedVars()
+      .map((vars) =>
+        vars.map(({ name, value }) => `  ${name}: ${value}`).join('\n')
+      )
+      .join('\n\n')}`
 
     const fullFile = `#{":root"}
-  //declared base css variables
-${baseCssVariableStyles}
-
-  //derived, generated css variables
-${derivedCssVarStyles}`
+${cssVars}`
 
     return fullFile
   }
