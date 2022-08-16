@@ -5,6 +5,9 @@ export interface BulmaCssVarsOptions {
     colorDefs: {
         [colorName: string]: ColorDef;
     };
+    derivedColorDefs: {
+        [colorName: string]: derivedColorDef;
+    };
 }
 export interface Hsl {
     h: number;
@@ -20,7 +23,8 @@ export interface Rgb {
 }
 export declare type Hex = string;
 export declare type ColorDef = Hsl | Rgb | Hex;
-export declare type ColorFn = 'rgba' | 'adjusthue' | 'saturate' | 'desaturate' | 'lighten' | 'darken' | 'color-invert' | 'dark-color' | 'light-color';
+export declare type derivedColorDef = [string];
+export declare type ColorFn = 'rgba' | 'adjusthue' | 'saturate' | 'desaturate' | 'lighten' | 'darken' | 'color-invert' | 'dark-color' | 'light-color' | 'transparentize';
 export interface ColorFnCall {
     fn: ColorFn;
     fnArg: string;

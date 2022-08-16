@@ -3,6 +3,7 @@ export interface BulmaCssVarsOptions {
   sassOutputFile: string
   sassEntryFile: string
   colorDefs: { [colorName: string]: ColorDef }
+  derivedColorDefs: { [colorName: string]: derivedColorDef }
 }
 
 export interface Hsl {
@@ -21,6 +22,8 @@ export type Hex = string
 
 export type ColorDef = Hsl | Rgb | Hex
 
+export type derivedColorDef = [string]
+
 export type ColorFn =
   | 'rgba'
   | 'adjusthue'
@@ -31,6 +34,7 @@ export type ColorFn =
   | 'color-invert'
   | 'dark-color'
   | 'light-color'
+  | 'transparentize'
 
 export interface ColorFnCall {
   fn: ColorFn

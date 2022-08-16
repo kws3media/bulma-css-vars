@@ -65,13 +65,16 @@ function runCli(cwd) {
             };
         }));
         const provisionalUpdater = new color_updater_1.ColorGenerator(colorCallSetFromColorDef);
-        const sassVarsContentBase = provisionalUpdater.createWritableSassFileOnlySassBaseVariables();
-        // create empty sass vars output file if it does not exist yet
-        if (!(yield (0, fs_helper_1.exists)(sassOutputFile)) || !(yield (0, fs_helper_1.fileStartsWith)(sassOutputFile, sassVarsContentBase))) {
-            yield (0, fs_helper_1.writeFile)(sassOutputFile, sassVarsContentBase);
+        var sassVarsContentBase = provisionalUpdater.createWritableSassFileOnlySassBaseVariables();
+        if (options.derivedColorDefs) {
+            let derivedSassVars = Object.entries(options.derivedColorDefs).map(([colorName, derivedColors]) => derivedColors.map((derivedColor) => `$${derivedColor}: $${colorName}`).join('\n')).join('\n');
+            sassVarsContentBase = `${sassVarsContentBase}\n${derivedSassVars}`;
         }
-        // create empty theme file if it does not exist yet
-        if (!(yield (0, fs_helper_1.exists)(themeFile))) {
+        if (sassOutputFile) {
+            yield (0, fs_helper_1.writeFile)(sassOutputFile, sassVarsContentBase);
+            console.log(`Updated ${sassOutputFile}`);
+        }
+        if (themeFile) {
             yield (0, fs_helper_1.writeFile)(themeFile, `#{":root"}`);
         }
         // render sass
@@ -88,7 +91,7 @@ function runCli(cwd) {
         const sassVarsContent = generator.createWritableSassFile();
         // write sass vars output file
         yield (0, fs_helper_1.writeFile)(themeFile, sassVarsContent);
-        console.log(`Updated ${sassOutputFile}`);
+        console.log(`Updated ${themeFile}`);
     });
 }
 exports.runCli = runCli;

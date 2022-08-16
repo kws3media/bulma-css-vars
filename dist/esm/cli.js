@@ -12,7 +12,7 @@ import { defaultOptions } from './default-options';
 import { getUsedVariables } from './find-used-vars';
 import { ColorGenerator } from './color-updater';
 import { strValFromColorDef, stringToHsl } from './bulma-color-tools';
-import { getAbsoluteFileName, exists, fileStartsWith, writeFile, } from './fs-helper';
+import { getAbsoluteFileName, exists, writeFile, } from './fs-helper';
 import { compileSass } from './compile-sass';
 const configFileName = 'bulma-css-vars.config.js';
 const mainSassFileName = 'src/scss/app.scss';
@@ -62,13 +62,16 @@ export function runCli(cwd) {
             };
         }));
         const provisionalUpdater = new ColorGenerator(colorCallSetFromColorDef);
-        const sassVarsContentBase = provisionalUpdater.createWritableSassFileOnlySassBaseVariables();
-        // create empty sass vars output file if it does not exist yet
-        if (!(yield exists(sassOutputFile)) || !(yield fileStartsWith(sassOutputFile, sassVarsContentBase))) {
-            yield writeFile(sassOutputFile, sassVarsContentBase);
+        var sassVarsContentBase = provisionalUpdater.createWritableSassFileOnlySassBaseVariables();
+        if (options.derivedColorDefs) {
+            let derivedSassVars = Object.entries(options.derivedColorDefs).map(([colorName, derivedColors]) => derivedColors.map((derivedColor) => `$${derivedColor}: $${colorName}`).join('\n')).join('\n');
+            sassVarsContentBase = `${sassVarsContentBase}\n${derivedSassVars}`;
         }
-        // create empty theme file if it does not exist yet
-        if (!(yield exists(themeFile))) {
+        if (sassOutputFile) {
+            yield writeFile(sassOutputFile, sassVarsContentBase);
+            console.log(`Updated ${sassOutputFile}`);
+        }
+        if (themeFile) {
             yield writeFile(themeFile, `#{":root"}`);
         }
         // render sass
@@ -85,7 +88,7 @@ export function runCli(cwd) {
         const sassVarsContent = generator.createWritableSassFile();
         // write sass vars output file
         yield writeFile(themeFile, sassVarsContent);
-        console.log(`Updated ${sassOutputFile}`);
+        console.log(`Updated ${themeFile}`);
     });
 }
 const defaultConfigContent = `const appColors = {

@@ -65,7 +65,8 @@ async function validateOptions(cwd: string) {
 }
 
 export async function runCli(cwd: string) {
-  const { options, sassEntryFile, sassOutputFile, themeFile } = await validateOptions(cwd)
+  const { options, sassEntryFile, sassOutputFile, themeFile } =
+    await validateOptions(cwd)
 
   // colorDefs
   const colorDefs = options.colorDefs
@@ -81,15 +82,26 @@ export async function runCli(cwd: string) {
   )
 
   const provisionalUpdater = new ColorGenerator(colorCallSetFromColorDef)
-  const sassVarsContentBase = provisionalUpdater.createWritableSassFileOnlySassBaseVariables()
+  var sassVarsContentBase =
+    provisionalUpdater.createWritableSassFileOnlySassBaseVariables()
 
-  // create empty sass vars output file if it does not exist yet
-  if (!(await exists(sassOutputFile)) || !(await fileStartsWith(sassOutputFile, sassVarsContentBase))) {
-    await writeFile(sassOutputFile, sassVarsContentBase)
+  if (options.derivedColorDefs) {
+    let derivedSassVars = Object.entries(options.derivedColorDefs)
+      .map(([colorName, derivedColors]) =>
+        derivedColors
+          .map((derivedColor) => `$${derivedColor}: $${colorName}`)
+          .join('\n')
+      )
+      .join('\n')
+    sassVarsContentBase = `${sassVarsContentBase}\n${derivedSassVars}`
   }
 
-  // create empty theme file if it does not exist yet
-  if (!(await exists(themeFile))) {
+  if (sassOutputFile) {
+    await writeFile(sassOutputFile, sassVarsContentBase)
+    console.log(`Updated ${sassOutputFile}`)
+  }
+
+  if (themeFile) {
     await writeFile(themeFile, `#{":root"}`)
   }
 
@@ -114,7 +126,7 @@ export async function runCli(cwd: string) {
 
   // write sass vars output file
   await writeFile(themeFile, sassVarsContent)
-  console.log(`Updated ${sassOutputFile}`)
+  console.log(`Updated ${themeFile}`)
 }
 
 const defaultConfigContent = `const appColors = {

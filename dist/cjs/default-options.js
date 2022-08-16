@@ -6,4 +6,5 @@ exports.defaultOptions = {
     themeFile: './generated-bulma-css-vars-theme.sass',
     sassEntryFile: null,
     colorDefs: {},
+    derivedColorDefs: {},
 };
