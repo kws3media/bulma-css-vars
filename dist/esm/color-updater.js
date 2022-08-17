@@ -1,4 +1,4 @@
-import { bulmaColorTools, getNameValFromColorDef, stringToHsl, strValFromColorDef } from './bulma-color-tools';
+import { bulmaColorTools, getNameValFromColorDef, stringToHsl, strValFromColorDef, } from './bulma-color-tools';
 export class ColorUpdater {
     constructor(colorVals) {
         this.colorVals = colorVals;
@@ -34,7 +34,10 @@ export class ColorUpdater {
         const value = stringToHsl(colorVal);
         this.colorVals[colorName].value = value;
         const calls = (this.colorVals[colorName] && this.colorVals[colorName].calls) || [];
-        return [getNameValFromColorDef(colorName, value), ...calls.map((call) => this.callToNameVal(colorName, call))];
+        return [
+            getNameValFromColorDef(colorName, value),
+            ...calls.map((call) => this.callToNameVal(colorName, call)),
+        ];
     }
     updateVarsInDocument(colorName, colorVal) {
         const updateds = this.getUpdatedVars(colorName, colorVal);
@@ -62,7 +65,9 @@ export class ColorUpdater {
     }
     createDerivedVarName(call) {
         function evaluateCallName(fnName, fnArg, compose) {
-            const partCompose = compose ? evaluateCallName(compose.fn, compose.fnArg, compose.composeArg) : '';
+            const partCompose = compose
+                ? evaluateCallName(compose.fn, compose.fnArg, compose.composeArg)
+                : '';
             const partFnArg = fnArg ? `--${fnArg}` : '';
             return `${partFnArg}--${fnName}${partCompose}`;
         }
@@ -71,7 +76,10 @@ export class ColorUpdater {
 }
 export class ColorGenerator extends ColorUpdater {
     getAllVars() {
-        return [...this.getBaseVars(), ...[].concat(...this.getDerivedVars())];
+        return [
+            ...this.getBaseVars(),
+            ...[].concat(...this.getDerivedVars()),
+        ];
     }
     createWritableSassFileOnlySassBaseVariables() {
         return `${this.getBaseVarNames()
@@ -80,7 +88,9 @@ export class ColorGenerator extends ColorUpdater {
 `;
     }
     createWritableSassFile() {
-        const cssVars = `${this.getMergedVars().map((vars) => vars.map(({ name, value }) => `  ${name}: ${value}`).join('\n')).join('\n\n')}`;
+        const cssVars = `${this.getMergedVars()
+            .map((vars) => vars.map(({ name, value }) => `  ${name}: ${value}`).join('\n'))
+            .join('\n\n')}`;
         const fullFile = `#{":root"}
 ${cssVars}`;
         return fullFile;

@@ -37,7 +37,10 @@ class ColorUpdater {
         const value = (0, bulma_color_tools_1.stringToHsl)(colorVal);
         this.colorVals[colorName].value = value;
         const calls = (this.colorVals[colorName] && this.colorVals[colorName].calls) || [];
-        return [(0, bulma_color_tools_1.getNameValFromColorDef)(colorName, value), ...calls.map((call) => this.callToNameVal(colorName, call))];
+        return [
+            (0, bulma_color_tools_1.getNameValFromColorDef)(colorName, value),
+            ...calls.map((call) => this.callToNameVal(colorName, call)),
+        ];
     }
     updateVarsInDocument(colorName, colorVal) {
         const updateds = this.getUpdatedVars(colorName, colorVal);
@@ -65,7 +68,9 @@ class ColorUpdater {
     }
     createDerivedVarName(call) {
         function evaluateCallName(fnName, fnArg, compose) {
-            const partCompose = compose ? evaluateCallName(compose.fn, compose.fnArg, compose.composeArg) : '';
+            const partCompose = compose
+                ? evaluateCallName(compose.fn, compose.fnArg, compose.composeArg)
+                : '';
             const partFnArg = fnArg ? `--${fnArg}` : '';
             return `${partFnArg}--${fnName}${partCompose}`;
         }
@@ -75,7 +80,10 @@ class ColorUpdater {
 exports.ColorUpdater = ColorUpdater;
 class ColorGenerator extends ColorUpdater {
     getAllVars() {
-        return [...this.getBaseVars(), ...[].concat(...this.getDerivedVars())];
+        return [
+            ...this.getBaseVars(),
+            ...[].concat(...this.getDerivedVars()),
+        ];
     }
     createWritableSassFileOnlySassBaseVariables() {
         return `${this.getBaseVarNames()
@@ -84,7 +92,9 @@ class ColorGenerator extends ColorUpdater {
 `;
     }
     createWritableSassFile() {
-        const cssVars = `${this.getMergedVars().map((vars) => vars.map(({ name, value }) => `  ${name}: ${value}`).join('\n')).join('\n\n')}`;
+        const cssVars = `${this.getMergedVars()
+            .map((vars) => vars.map(({ name, value }) => `  ${name}: ${value}`).join('\n'))
+            .join('\n\n')}`;
         const fullFile = `#{":root"}
 ${cssVars}`;
         return fullFile;
