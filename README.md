@@ -13,9 +13,9 @@ There is quite some setup and configuration to be done, but once it is setup, it
 ## Usage
 
 ```bash
-npm i -S bulma bulma-css-vars
+npm i -D bulma "https://github.com/kws3media/bulma-css-vars.git"
 npm i -D sass
-node ./node_modules/.bin/bulma-css-vars --init
+npm run generateCssVars
 ```
 
 To use this package, you have to use the dart implementation of sass, the `sass` package, version `1.23` or higher. If you use webpack and the `sass-loader`, you have to make sure you do not have `node-sass` installed, or configure `options: { implementation: require('sass') }` for the `sass-loader`.
@@ -36,14 +36,17 @@ const appColors = {
 // reuse variable colors
 appColors['text'] = appColors['primary']
 
+const derivedColors = {
+  "red": ["danger", "another_color"],
+  "green": ["success", "another_color"]
+}
+
 export default {
-  sassEntryFile: './src/style/main-sass-file.sass',
-  jsOutputFile: './src/bulma-generated/bulma-colors.js',
-  sassOutputFile: './src/bulma-generated/generated-vars.sass',
-  cssFallbackOutputFile: './src/bulma-generated/generated-fallbacks.css',
+  sassEntryFile: './src/scss/app.sass',
+  sassOutputFile: './src/scss/_patched_variables.sass',
+  themeFile: "./src/scss/theme.sass",
   colorDefs: appColors,
-  globalWebVar: false,
-  transition: '0.5s ease',
+  derivedColorDefs: derivedColors
 }
 ```
 
@@ -52,20 +55,18 @@ You need to configure `bulma-css-vars` to tell it about your sass setup, especia
 | Config key              |                                                                                                                                                                                                                  |
 | ----------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `sassEntryFile`         | Sass Entry File of you Application - relative path form config file                                                                                                                                              |
-| `jsOutputFile`          | full name of generated js file, can also be `<a-typescript-file>.ts`                                                                                                                                             |
-| `sassOutputFile`        | full name of generated sass file, should be included in your app styles                                                                                                                                          |
-| `cssFallbackOutputFile` | full name of generated css file, should be included in your sass app styles (optional)                                                                                                                           |
+| `sassOutputFile`        | full name of generated sass file, which contains only patched variables, should be included in your app styles                                                                                                                                          |
+| `themeFile`             | full name of generated css variables, should be included in your app styles                                                                                                                                          |
 | `colorDefs`             | color definitions, names have to match bulma color names (see examples above)                                                                                                                                    |
-| `globalWebVar`          | if you import js files directly in the browser, you need `true`, see [Direct Web Setup](#direct-web-setup), defaults to `false`                                                                                  |
-| `transition`            | will create the [CSS transition](https://developer.mozilla.org/en-US/docs/Web/CSS/transition) shorthand for all colored CSS variables, should consist of `[ <duration> [ <timing-function> [ <time-delay> ] ] ]` |
+| `derivedColorDefs`      | array of color definitions, index names have to match bulma color names (see examples above)                                                                                                                                    |
 
 Some more files have to be setup, which can be achieved using `node ./node_modules/.bin/bulma-css-vars --init`.
 
 ```scss
-// main.scss
-@import './bulma-generated/generated-fallback.css'; // import fallbacks first, so they are overridden
-@import './bulma-generated/generated-vars.sass';
-@import '../node_modules/bulma-css-vars/bulma-cv-lib';
+// app.scss
+@import './src/scss/_patched_variables.sass';
+@import './node_modules/bulma/bulma';
+@import './src/scss/theme.sass';
 ```
 
 Instead of using `bulma-cv-lib.sass`, you can also just use the bulma packages you like. Look inside the `bulma-cv-lib.sass` to understand more, and especially import `functions.sass` right after the original `functions.sass` is loaded.
@@ -73,7 +74,7 @@ Instead of using `bulma-cv-lib.sass`, you can also just use the bulma packages y
 ```json
 // package.json
   scripts: {
-    "update-bulma-colors": "bulma-css-vars",
+    "generateCssVars": "bulma-css-vars",
   }
 ```
 
