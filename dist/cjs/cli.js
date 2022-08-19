@@ -69,7 +69,7 @@ function runCli(cwd) {
         if (options.derivedColorDefs) {
             let derivedSassVars = Object.entries(options.derivedColorDefs)
                 .map(([colorName, derivedColors]) => derivedColors
-                .map((derivedColor) => `$${derivedColor}: $${colorName}`)
+                .map((derivedColor) => `$${derivedColor}: $${colorName};`)
                 .join('\n'))
                 .join('\n');
             sassVarsContentBase = `${sassVarsContentBase}\n${derivedSassVars}`;
@@ -79,7 +79,8 @@ function runCli(cwd) {
             console.log(`Updated ${sassOutputFile}`);
         }
         if (themeFile) {
-            yield (0, fs_helper_1.writeFile)(themeFile, `#{":root"}`);
+            yield (0, fs_helper_1.writeFile)(themeFile, `:root {
+}`);
         }
         // render sass
         const renderedCss = (0, compile_sass_1.compileSass)(sassEntryFile);
@@ -105,12 +106,12 @@ const defaultConfigContent = `const appColors = {
 
 module.exports = {
   sassEntryFile: 'src/scss/app.scss',
-  sassOutputFile: 'src/scss/theme.sass',
+  sassOutputFile: 'src/scss/theme.scss',
   colorDefs: appColors,
 }
 
 `;
-const defaultMainScssContent = `@import './scss/theme.sass';
+const defaultMainScssContent = `@import './scss/theme.scss';
 @import 'bulma-css-vars/bulma-cv-lib';
 
 `;

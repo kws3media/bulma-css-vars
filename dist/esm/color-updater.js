@@ -83,16 +83,17 @@ export class ColorGenerator extends ColorUpdater {
     }
     createWritableSassFileOnlySassBaseVariables() {
         return `${this.getBaseVarNames()
-            .map((name) => `$${name}: var(--${name})`)
+            .map((name) => `$${name}: var(--${name});`)
             .join('\n')}
 `;
     }
     createWritableSassFile() {
         const cssVars = `${this.getMergedVars()
-            .map((vars) => vars.map(({ name, value }) => `  ${name}: ${value}`).join('\n'))
-            .join('\n\n')}`;
-        const fullFile = `#{":root"}
-${cssVars}`;
+            .map((vars) => vars.map(({ name, value }) => `  ${name}: ${value}`).join(';\n'))
+            .join(';\n\n')}`;
+        const fullFile = `:root {
+${cssVars};
+}`;
         return fullFile;
     }
 }

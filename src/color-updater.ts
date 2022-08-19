@@ -124,7 +124,7 @@ export class ColorGenerator extends ColorUpdater {
 
   createWritableSassFileOnlySassBaseVariables(): string {
     return `${this.getBaseVarNames()
-      .map((name) => `$${name}: var(--${name})`)
+      .map((name) => `$${name}: var(--${name});`)
       .join('\n')}
 `
   }
@@ -132,12 +132,13 @@ export class ColorGenerator extends ColorUpdater {
   createWritableSassFile(): string {
     const cssVars = `${this.getMergedVars()
       .map((vars) =>
-        vars.map(({ name, value }) => `  ${name}: ${value}`).join('\n')
+        vars.map(({ name, value }) => `  ${name}: ${value}`).join(';\n')
       )
-      .join('\n\n')}`
+      .join(';\n\n')}`
 
-    const fullFile = `#{":root"}
-${cssVars}`
+    const fullFile = `:root {
+${cssVars};
+}`
 
     return fullFile
   }
