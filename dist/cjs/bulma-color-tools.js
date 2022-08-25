@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bulmaColorTools = exports.stringToHsl = exports.strValFromColorDef = exports.getNameValFromColorDef = exports.newRgb = exports.newHsl = void 0;
+exports.jsColorTools = exports.bulmaColorTools = exports.stringToHsl = exports.strValFromColorDef = exports.getNameValFromColorDef = exports.newRgb = exports.newHsl = void 0;
 const Color = require("color");
 function lightness(color) {
     return color.hsl().color[2] / 100;
@@ -172,5 +172,19 @@ exports.bulmaColorTools = {
         const color = Color(col);
         const percAsNumber = Number(perc) / 100;
         return color.alpha(percAsNumber).toString();
+    },
+};
+exports.jsColorTools = {
+    darken(col, perc) {
+        const color = Color(col);
+        const hsl = getHsl(color);
+        hsl.color[2] = Math.max(0, hsl.color[2] - Number(perc));
+        return hsl.hex().toString();
+    },
+    lighten(col, perc) {
+        const color = Color(col);
+        const hsl = getHsl(color);
+        hsl.color[2] = Math.min(100, hsl.color[2] + Number(perc));
+        return hsl.hex().toString();
     },
 };

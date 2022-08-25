@@ -16,3 +16,7 @@ export declare const bulmaColorTools: {
     'dark-color'(col: string): string;
     transparentize(col: string, perc: string): string;
 };
+export declare const jsColorTools: {
+    darken(col: string, perc: string): string;
+    lighten(col: string, perc: string): string;
+};

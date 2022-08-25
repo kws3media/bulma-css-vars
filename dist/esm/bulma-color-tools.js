@@ -166,3 +166,17 @@ export const bulmaColorTools = {
         return color.alpha(percAsNumber).toString();
     },
 };
+export const jsColorTools = {
+    darken(col, perc) {
+        const color = Color(col);
+        const hsl = getHsl(color);
+        hsl.color[2] = Math.max(0, hsl.color[2] - Number(perc));
+        return hsl.hex().toString();
+    },
+    lighten(col, perc) {
+        const color = Color(col);
+        const hsl = getHsl(color);
+        hsl.color[2] = Math.min(100, hsl.color[2] + Number(perc));
+        return hsl.hex().toString();
+    },
+};
