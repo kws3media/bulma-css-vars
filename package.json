@@ -1,12 +1,15 @@
 {
-  "name": "bulma-css-vars",
-  "version": "0.8.0",
+  "name": "@kws3/bulma-css-vars",
+  "version": "0.0.1",
   "description": "Bulma with CSS variables",
   "keywords": [
     "bulma",
     "bulma.io",
     "CSS Variables"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "./dist/cjs/index.js",
   "browser": "./dist/esm/index.js",
   "module": "./dist/esm/index.js",

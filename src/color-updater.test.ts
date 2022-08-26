@@ -74,35 +74,22 @@ describe('Color Updater', () => {
 })
 
 describe('Color Generator', () => {
-  test('writes base variables in sass style', () => {
+  test('writes base variables in scss style', () => {
     const generator = new ColorGenerator(colorCallSet)
     const sassBaseVars = generator.createWritableSassFileOnlySassBaseVariables()
     expect(sassBaseVars).toMatchInlineSnapshot(`
-      "$black: var(--black)
+      "$black: var(--black);
       "
     `)
   })
 
-  test('writes all variables in sass style', () => {
+  test('writes all variables in scss style', () => {
     const generator = new ColorGenerator(colorCallSet)
     const sassVars = generator.createWritableSassFile()
-    expect(sassVars).toMatchInlineSnapshot(`
-      "
-      // sass variables
-      $black: var(--black)
-
-
-      // declared base css variables
-      #{\\":root\\"}
-        --black: rgb(82, 145, 163)
-
-
-      // derived, generated css variables
-      #{\\":root\\"}
-        --black--42deg--adjusthue--4200--lighten: rgb(221, 222, 238)
-        --black--color-invert: rgb(255, 255, 255)
-
-      "
-    `)
+    expect(sassVars).toMatchInlineSnapshot(`":root {
+  --black: rgb(82, 145, 163);
+  --black--42deg--adjusthue--4200--lighten: rgb(221, 222, 238);
+  --black--color-invert: rgb(255, 255, 255);
+}"`)
   })
 })
