@@ -85,9 +85,20 @@ describe('Color Generator', () => {
 
   test('writes all variables in scss style', () => {
     const generator = new ColorGenerator(colorCallSet)
-    const sassVars = generator.createWritableSassFile()
+    const sassVars = generator.createWritableSassFile(":root")
     expect(sassVars).toMatchSnapshot(
 `":root {
+  --black: rgb(82, 145, 163);
+  --black--42deg--adjusthue--4200--lighten: rgb(221, 222, 238);
+  --black--color-invert: rgb(255, 255, 255);
+}"`)
+  })
+
+  test('adds custom block wrapper', () => {
+    const generator = new ColorGenerator(colorCallSet)
+    const sassVars = generator.createWritableSassFile("[data-theme=\"dark\"]")
+    expect(sassVars).toMatchSnapshot(
+`"[data-theme="dark"] {
   --black: rgb(82, 145, 163);
   --black--42deg--adjusthue--4200--lighten: rgb(221, 222, 238);
   --black--color-invert: rgb(255, 255, 255);

@@ -86,7 +86,7 @@ export async function runCli(cwd: string) {
   }
 
   if (themeFile) {
-    await writeFile(themeFile, `:root {
+    await writeFile(themeFile, `${options.blockWrapper} {
 }`)
   }
 
@@ -107,7 +107,7 @@ export async function runCli(cwd: string) {
   )
   // run generate-vars to have sass information
   const generator = new ColorGenerator(usedVarsWithColors)
-  const sassVarsContent = generator.createWritableSassFile()
+  const sassVarsContent = generator.createWritableSassFile(options.blockWrapper)
 
   // write sass vars output file
   await writeFile(themeFile, sassVarsContent)

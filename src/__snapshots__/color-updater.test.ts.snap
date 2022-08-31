@@ -1,5 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Color Generator adds custom block wrapper: "[data-theme="dark"] {
+  --black: rgb(82, 145, 163);
+  --black--42deg--adjusthue--4200--lighten: rgb(221, 222, 238);
+  --black--color-invert: rgb(255, 255, 255);
+}" 1`] = `
+"[data-theme=\\"dark\\"] {
+  --black: rgb(82, 145, 163);
+  --black--42deg--adjusthue--4200--lighten: rgb(221, 222, 238);
+  --black--color-invert: rgb(255, 255, 255);
+}"
+`;
+
 exports[`Color Generator writes all variables in scss style: ":root {
   --black: rgb(82, 145, 163);
   --black--42deg--adjusthue--4200--lighten: rgb(221, 222, 238);

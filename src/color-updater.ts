@@ -129,14 +129,14 @@ export class ColorGenerator extends ColorUpdater {
 `
   }
 
-  createWritableSassFile(): string {
+  createWritableSassFile(blockWrapper: string): string {
     const cssVars = `${this.getMergedVars()
       .map((vars) =>
         vars.map(({ name, value }) => `  ${name}: ${value}`).join(';\n')
       )
       .join(';\n\n')}`
 
-    const fullFile = `:root {
+    const fullFile = `${blockWrapper} {
 ${cssVars};
 }`
 
