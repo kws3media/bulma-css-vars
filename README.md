@@ -37,17 +37,11 @@ const appColors = {
 // reuse variable colors
 appColors['text'] = appColors['primary']
 
-const derivedColors = {
-  "red": ["danger", "another_color"],
-  "green": ["success", "another_color"]
-}
-
 export default {
   sassEntryFile: './src/scss/app.sass',
   sassOutputFile: './src/scss/_patched_variables.sass',
   themeFile: "./src/scss/theme.sass",
-  colorDefs: appColors,
-  derivedColorDefs: derivedColors
+  colorDefs: appColors
 }
 ```
 
@@ -59,7 +53,6 @@ You need to configure `bulma-css-vars` to tell it about your sass setup, especia
 | `sassOutputFile`        | full name of generated sass file, which contains only patched variables, should be included in your app styles                                                                                                                                          |
 | `themeFile`             | full name of generated css variables, should be included in your app styles                                                                                                                                          |
 | `colorDefs`             | color definitions, names have to match bulma color names (see examples above)                                                                                                                                    |
-| `derivedColorDefs`      | array of color definitions, index names have to match bulma color names (see examples above)                                                                                                                                    |
 
 Some more files have to be setup, which can be achieved using `node ./node_modules/.bin/bulma-css-vars --init`.
 

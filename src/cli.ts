@@ -80,17 +80,6 @@ export async function runCli(cwd: string) {
   var sassVarsContentBase =
     provisionalUpdater.createWritableSassFileOnlySassBaseVariables()
 
-  if (options.derivedColorDefs) {
-    let derivedSassVars = Object.entries(options.derivedColorDefs)
-      .map(([colorName, derivedColors]) =>
-        derivedColors
-          .map((derivedColor) => `$${derivedColor}: $${colorName};`)
-          .join('\n')
-      )
-      .join('\n')
-    sassVarsContentBase = `${sassVarsContentBase}\n${derivedSassVars}`
-  }
-
   if (sassOutputFile) {
     await writeFile(sassOutputFile, sassVarsContentBase)
     console.log(`Updated ${sassOutputFile}`)

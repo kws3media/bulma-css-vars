@@ -3,7 +3,6 @@ export interface BulmaCssVarsOptions {
   sassOutputFile: string
   sassEntryFile: string
   colorDefs: { [colorName: string]: ColorDef }
-  derivedColorDefs: { [colorName: string]: derivedColorDef }
 }
 
 export interface Hsl {
@@ -21,8 +20,6 @@ export interface Rgb {
 export type Hex = string
 
 export type ColorDef = Hsl | Rgb | Hex
-
-export type derivedColorDef = [string]
 
 export type ColorFn =
   | 'rgba'
