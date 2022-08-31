@@ -1,10 +1,11 @@
 # Bulma CSS Vars
 
+Forked from: https://github.com/wtho/bulma-css-vars
+
 Bulma CSS Vars extends [**Bulma**](https://github.com/jgthms/bulma) to use CSS variables, that can be set to arbitrary values at runtime on the website and installs fallbacks for browsers without CSS variables capabilities.
 
 [![version](https://img.shields.io/npm/v/bulma-css-vars.svg)](https://www.npmjs.org/package/bulma-css-vars)
 [![](https://github.com/wtho/bulma-css-vars/workflows/ci/badge.svg)](https://github.com/wtho/bulma-css-vars/actions?query=workflow%3Aci)
-[![](https://img.shields.io/badge/Demo-green)](https://wtho.github.io/bulma-css-vars)
 
 This is an extension and a kind of "sass-pre-post-processor" that tries to be as least intrusive as possible to Bulma, while making arbitrary color changes in the bulma color schemes automated, as easy as possible.
 
@@ -13,9 +14,9 @@ There is quite some setup and configuration to be done, but once it is setup, it
 ## Usage
 
 ```bash
-npm i -D bulma "https://github.com/kws3media/bulma-css-vars.git"
+npm i -S bulma @kws3/bulma-css-vars
 npm i -D sass
-npm run generateCssVars
+node ./node_modules/.bin/bulma-css-vars --init
 ```
 
 To use this package, you have to use the dart implementation of sass, the `sass` package, version `1.23` or higher. If you use webpack and the `sass-loader`, you have to make sure you do not have `node-sass` installed, or configure `options: { implementation: require('sass') }` for the `sass-loader`.
