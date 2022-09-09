@@ -3,7 +3,8 @@ export interface BulmaCssVarsOptions {
   sassOutputFile: string
   sassEntryFile: string
   colorDefs: { [colorName: string]: ColorDef }
-  blockWrapper: string
+  blockWrapper: string,
+  banner: string | null
 }
 
 export interface Hsl {

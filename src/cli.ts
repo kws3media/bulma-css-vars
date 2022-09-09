@@ -81,7 +81,7 @@ export async function runCli(cwd: string) {
     provisionalUpdater.createWritableSassFileOnlySassBaseVariables()
 
   if (sassOutputFile) {
-    await writeFile(sassOutputFile, sassVarsContentBase)
+    await writeFile(sassOutputFile, sassVarsContentBase, options.banner)
     console.log(`Updated ${sassOutputFile}`)
   }
 
@@ -110,7 +110,7 @@ export async function runCli(cwd: string) {
   const sassVarsContent = generator.createWritableSassFile(options.blockWrapper)
 
   // write sass vars output file
-  await writeFile(themeFile, sassVarsContent)
+  await writeFile(themeFile, sassVarsContent, options.banner)
   console.log(`Updated ${themeFile}`)
 }
 

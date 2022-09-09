@@ -8,7 +8,8 @@ async function mkdir(dirPath: string): Promise<string> {
 
 export async function writeFile(
   filePath: string,
-  content: string
+  content: string,
+  banner?: string
 ): Promise<void> {
   if (!fsp || !fsp.writeFile) {
     throw new Error(
@@ -19,7 +20,14 @@ export async function writeFile(
   if (!(await exists(dir))) {
     await mkdir(dir)
   }
-  await fsp.writeFile(filePath, content)
+  let _content: string = content;
+  if(banner){
+    _content = `${banner}
+
+    ${content}`;
+  }
+
+  await fsp.writeFile(filePath, _content)
 }
 
 export async function exists(filePath: string): Promise<boolean> {

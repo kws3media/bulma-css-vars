@@ -5,5 +5,10 @@ export const defaultOptions: BulmaCssVarsOptions = {
   themeFile: './generated-bulma-css-vars-theme.scss',
   sassEntryFile: null,
   colorDefs: {},
-  blockWrapper:":root"
+  blockWrapper:":root",
+  banner: `/**
+ * This file has been auto-generated.
+ * Any chnages to this file will be overwritten,
+ * when this file is generated again.
+ */`
 }
