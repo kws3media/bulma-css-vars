@@ -200,3 +200,52 @@ export const bulmaColorTools = {
     return color.alpha(percAsNumber).toString()
   },
 }
+
+/**
+ * These functions are to be used in JS only.
+ * Here we ensure percentage values are not divided by 100.
+ * Because in the versions of these methods above, percantages are pre-multiplied by 100.
+ */
+export const jsColorTools = {
+  darken(col: string, perc: string) {
+    const color = Color(col)
+    const hsl = getHsl(color)
+    hsl.color[2] = Math.max(0, hsl.color[2] - Number(perc))
+    return hsl.rgb().toString()
+  },
+  lighten(col: string, perc: string) {
+    const color = Color(col)
+    const hsl = getHsl(color)
+    hsl.color[2] = Math.min(100, hsl.color[2] + Number(perc))
+    return hsl.rgb().toString()
+  },
+  transparentize(col: string, perc: string) {
+    const color = Color(col)
+    return color.alpha(Number(perc)).toString()
+  },
+  findLightColor(col: string) {
+    const color = Color(col)
+    let light = 0.96
+    if (lightness(color) > 0.96) {
+      light = lightness(color)
+    }
+    return color
+      .lightness(light * 100)
+      .rgb()
+      .toString()
+  },
+  findDarkColor(col: string) {
+    const color = Color(col)
+    const baseLum = 29
+    const luminance = colorLuminance(color)
+    const luminanceDelta = 0.53 - luminance
+    const targetLum = Math.round(baseLum + luminanceDelta * 53)
+    const changeLum = Math.max(baseLum, targetLum)
+    return color.lightness(changeLum).rgb().toString()
+  },
+  findColorInvert(col: string) {
+    const color = Color(col).rgb()
+    if (colorLuminance(color) > 0.55) return Color('#000').alpha(0.7).toString()
+    else return 'rgb(255, 255, 255)'
+  },
+}
