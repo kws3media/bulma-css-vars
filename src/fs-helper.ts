@@ -24,7 +24,7 @@ export async function writeFile(
   if(banner){
     _content = `${banner}
 
-    ${content}`;
+${content}`;
   }
 
   await fsp.writeFile(filePath, _content)
