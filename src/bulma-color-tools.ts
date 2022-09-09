@@ -82,8 +82,8 @@ export function strValFromColorDef(
   colorDef: Hsl | Rgb | Hex,
   colorName: string
 ): string {
-  if (typeof colorDef === 'string' && colorDef.startsWith('#')) {
-    // hex
+  if (typeof colorDef === 'string') {
+    // hex | rgb | rgba | hsl
     return colorDef
   }
   if (typeof colorDef === 'object') {
